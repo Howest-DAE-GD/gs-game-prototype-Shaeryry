@@ -10,7 +10,7 @@ public:
 	Game& operator=(Game&& other) = delete;
 	// http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override
 	~Game();
-
+	 
 	void Update( float elapsedSec ) override;
 	void Draw( ) const override;
 
