@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Game.h"
+#include "Sword.h"
+#include "Enemy.h"
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -14,62 +16,75 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	m_Ball = new Ball( Vector2f( GetViewPort().width/2,GetViewPort().height/2 ) );
+	m_Player = new Player();
+	AddHumanoid(m_Player);
+	m_Ball->SetTarget(m_Player);
+
+	Enemy* newEnemy{ new Enemy(m_Ball) };
+	newEnemy->SetPosition(Vector2f(GetViewPort().width / 2, GetViewPort().height / 2));
+	AddEnemy(newEnemy);
 }
 
 void Game::Cleanup( )
 {
+	for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
+		delete m_Humanoids[humanoidIndex];
+	};
+
+	delete m_Ball;
 }
 
 void Game::Update( float elapsedSec )
 {
-	// Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	m_Ball->Update(elapsedSec);
+	// Ball logic
+
+	// Humanoid updates
+	for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
+		m_Humanoids[humanoidIndex]->Update(elapsedSec);
+	};
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
+		m_Humanoids[humanoidIndex]->Draw();
+	};
+	m_Ball->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
+	m_Player->ProcessKeyDownEvent(e);
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
-	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	m_Player->ProcessKeyUpEvent(e);
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 {
+	if (m_Player->GetWeapon() != nullptr) {
+		m_Player->GetWeapon()->SetTarget(Vector2f(float(e.x), float(e.y)));
+	}
 	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
 }
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 {
+	switch (e.button)
+	{
+	case SDL_BUTTON_LEFT:
+		m_Player->AttackPlayer(Point2f(float(e.x), float(e.y)), m_Ball, m_Humanoids);
+		break;
+	default:
+		break;
+	}
 	//std::cout << "MOUSEBUTTONDOWN event: ";
 	//switch ( e.button )
 	//{

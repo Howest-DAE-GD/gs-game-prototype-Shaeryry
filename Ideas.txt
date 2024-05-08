@@ -1,0 +1,9 @@
+
+Main Theme : Recursion/Loop + ...
+
+1.) You are a rubbery creature killing enemies at rapid speeds, your score is defined by how fast you kill enemies. (Inflatable)
+2.) Same idea as above, but more "traditional" with the ideas of a fast pace zombie killer. This one will rely on the mechanics being snappy and good ! (Apocalypse)
+3.) A city saving game with villains attacking a city 1 by 1, each villain having different stats and players being able to perform different actions. Also turn based. (Villain)
+4.) Sekiro. (Villain)
+5.) Boss fighting game, mostly dodge (Villain.)	
+6.) Physics based combat game, but it's fast pace with score based on sped (apocalyse)
