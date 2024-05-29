@@ -19,7 +19,9 @@ void Ball::Update(float elapsedSec)
 	if (m_Target != nullptr) {
 		GoTo(elapsedSec, m_Target->GetPosition() + Vector2f(m_Target->GetHitbox().width/2,m_Target->GetHitbox().height/2) );
 	}
-	SetSpeed( GetSpeed() + 5.f*elapsedSec );
+	if (GetSpeed() < BALL_MAX_SPEED) {
+		SetSpeed(GetSpeed() + BALL_SPEED_INCREASE * elapsedSec);
+	}
 	m_BallClock += elapsedSec;
 	
 }

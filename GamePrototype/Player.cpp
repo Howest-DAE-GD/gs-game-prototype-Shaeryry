@@ -2,78 +2,64 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player()
-	: 
+Player::Player() :
 	Humanoid(),
-	Moving_Forward{ false },
-	Moving_Left{ false },
-	Moving_Down{ false },
-	Moving_Right{false}
+	m_HoldingDown{ false },
+	m_HoldingJump{ false }
 {
 	SetHealth(10);
 }
 
-void Player::Update(float elapsedSec)
+void Player::Update(float elapsedSec) 
 {
-	Vector2f direction{0,0};
-	const bool IsMoving{Moving_Forward or Moving_Left or Moving_Right or Moving_Down};
+	const bool isFalling{ m_CurrentVelocity.y < 0 };
 
-	if (Moving_Left) {
-		direction.x -= 1;
-	} else if (Moving_Right) {
-		direction.x += 1;
-	}
-
-	if (Moving_Forward) {
-		direction.y = 1;
-	} else if (Moving_Down) {
-		direction.y = -1;
-	}
-
-	if (IsMoving) {
-		Humanoid::MoveTo(elapsedSec, GetPosition() + direction);
-	}
+	if (m_HoldingJump and isFalling) {
+		m_Gravity = (GRAVITY / 8);
+	} else if ( m_HoldingDown and isFalling ) {
+		m_Gravity = (GRAVITY * 3);
+	} else {
+		m_Gravity = GRAVITY;
+	};
 
 	Humanoid::Update(elapsedSec);
 }
-
-
 void Player::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 {
 	switch (e.keysym.sym) {
-		case FORWARD_KEY:
-			Moving_Forward = true;
+		case SDLK_UP:
+			m_HoldingJump = true;
+			this->Jump();
 			break;
-		case LEFT_KEY:
-			Moving_Left = true;
-			break;
-		case RIGHT_KEY:
-			Moving_Right = true;
-			break;
-		case DOWN_KEY:
-			Moving_Down = true;
+		case SDLK_DOWN:
+			m_HoldingDown = true;
 			break;
 		default:
 			break;
+	};
+}
+void Player::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
+{
+	switch (e.keysym.sym) { 
+		case SDLK_UP:
+			m_HoldingJump = false;
+			break;
+		case SDLK_DOWN:
+			m_HoldingDown = false;
+			break;
+		default:
+			break;
+	};
+};
+
+void Player::Jump()
+{
+	if (not InAir()) {
+		m_Velocity += Vector2f(0, DEFAULT_HUMANOID_JUMP_POWER);
 	}
 }
 
-void Player::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
+bool Player::InAir()
 {
-	switch (e.keysym.sym) {
-	case FORWARD_KEY:
-		Moving_Forward = false;
-		break;
-	case LEFT_KEY:
-		Moving_Left = false;
-		break;
-	case RIGHT_KEY:
-		Moving_Right = false;
-		break;
-	case DOWN_KEY:
-		Moving_Down = false;
-		break;
-	default:
-		break;
-	}
+	return (GetPosition().y > GROUND_HEIGHT);
 }

@@ -1,9 +1,8 @@
 #pragma once
 #include "BaseGame.h"
 #include "Humanoid.h"
+#include "Boss.h"
 #include "Player.h"
-#include "Ball.h"
-#include "Enemy.h"
 
 class Game : public BaseGame
 {
@@ -28,15 +27,14 @@ public:
 
 private:
 	Player* m_Player;
-	Ball* m_Ball;
+	Boss* m_Boss;
 	
 	std::vector<Humanoid*> m_Humanoids;
-	std::vector<Enemy*> m_Enemies;
+	//std::vector<Enemy*> m_Enemies;
 
 	// FUNCTIONS
 	void Initialize();
 	void Cleanup( );
 	void ClearBackground( ) const;
 	void AddHumanoid(Humanoid* humanoid) { m_Humanoids.push_back(humanoid); };
-	void AddEnemy(Enemy* enemy) { AddHumanoid(enemy); m_Enemies.push_back(enemy); };
 };

@@ -12,14 +12,14 @@ int SDL_main(int argv, char** args)
 
 	StartHeapControl();
 
-	Game* pGame{ new Game{ Window{ "Project name - Name, first name - 1DAEXX", 846.f , 500.f } } };
+	Game* pGame{ new Game{ Window{ "Villain vs Jumpy boy, Rity - 1DAE15", WINDOW_WIDTH , WINDOW_HEIGHT } } };
 	pGame->Run();
 	delete pGame;
 
 	DumpMemoryLeaks();
 	return 0;
 }
-
+ 
 
 void StartHeapControl()
 {

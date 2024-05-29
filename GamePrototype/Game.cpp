@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Game.h"
-#include "Sword.h"
-#include "Enemy.h"
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -16,14 +15,17 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_Ball = new Ball( Vector2f( GetViewPort().width/2,GetViewPort().height/2 ) );
-	m_Player = new Player();
-	AddHumanoid(m_Player);
-	m_Ball->SetTarget(m_Player);
+	// Player init
+	m_Player = new Player(); 
 
-	Enemy* newEnemy{ new Enemy(m_Ball) };
-	newEnemy->SetPosition(Vector2f(GetViewPort().width / 2, GetViewPort().height / 2));
-	AddEnemy(newEnemy);
+	// Boss init
+	m_Boss = new Boss(m_Player);
+	m_Boss->SetColor(Color4f(1, 0, 0, 1));
+	m_Boss->SetPosition(Vector2f(-BOSS_OFFSET, (GetViewPort().height / 2) ));
+
+	AddHumanoid(m_Player);
+	AddHumanoid(m_Boss);
+
 }
 
 void Game::Cleanup( )
@@ -31,14 +33,13 @@ void Game::Cleanup( )
 	for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
 		delete m_Humanoids[humanoidIndex];
 	};
-
-	delete m_Ball;
 }
 
 void Game::Update( float elapsedSec )
 {
-	m_Ball->Update(elapsedSec);
-	// Ball logic
+	// Movement logic
+	m_Boss->MoveTo(elapsedSec, m_Boss->GetPosition() + Vector2f(1, 0));
+	m_Player->MoveTo(elapsedSec, m_Player->GetPosition() + Vector2f(1, 0));
 
 	// Humanoid updates
 	for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
@@ -49,17 +50,26 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	const float CAMERA_X{ -m_Player->GetPosition().x + (GetViewPort().width / 2) };
 
-	for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
-		m_Humanoids[humanoidIndex]->Draw();
-	};
-	m_Ball->Draw();
+	// Ground
+	utils::SetColor(Color4f(1, 1, 1, 1));
+	utils::DrawRect(Rectf(0, 0, GetViewPort().width*1.25f, GROUND_HEIGHT));
+
+	glPushMatrix();
+	glTranslatef(CAMERA_X, 0, 0);
+	glRotatef(0, 0, 0, 1);
+
+		for (size_t humanoidIndex{}; humanoidIndex < m_Humanoids.size(); humanoidIndex++) {
+			m_Humanoids[humanoidIndex]->Draw();
+		};
+
+	glPopMatrix();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	m_Player->ProcessKeyDownEvent(e);
-	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -68,23 +78,12 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
-{
-	if (m_Player->GetWeapon() != nullptr) {
-		m_Player->GetWeapon()->SetTarget(Vector2f(float(e.x), float(e.y)));
-	}
+{ 
 	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
 }
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 {
-	switch (e.button)
-	{
-	case SDL_BUTTON_LEFT:
-		m_Player->AttackPlayer(Point2f(float(e.x), float(e.y)), m_Ball, m_Humanoids);
-		break;
-	default:
-		break;
-	}
 	//std::cout << "MOUSEBUTTONDOWN event: ";
 	//switch ( e.button )
 	//{
@@ -120,6 +119,6 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ClearBackground( ) const
 {
-	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
+	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }

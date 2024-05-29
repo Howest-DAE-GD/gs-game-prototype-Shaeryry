@@ -13,8 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Weapons">
-      <UniqueIdentifier>{2065ddcb-fdd7-4f3f-8e12-969b8c07b33b}</UniqueIdentifier>
+    <Filter Include="Header Files\Attacks">
+      <UniqueIdentifier>{611787cf-6d2e-4189-ac37-983cc5d3aba6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +45,15 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Attack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Beam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -73,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Attack.h">
+      <Filter>Header Files\Attacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Beam.h">
+      <Filter>Header Files\Attacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
