@@ -11,7 +11,7 @@ public:
 	explicit Humanoid();
 	Humanoid(const Humanoid& other) = delete;
 	Humanoid& operator=(const Humanoid& other) = delete;
-	~Humanoid();
+	virtual ~Humanoid();
 
 	virtual void Update(float elapsedSec);
 	virtual void Draw() const;

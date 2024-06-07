@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Attacks">
       <UniqueIdentifier>{611787cf-6d2e-4189-ac37-983cc5d3aba6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Pickups">
+      <UniqueIdentifier>{618c7ee2-be47-4651-b2be-9b31bb5fac31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -52,6 +55,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Beam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -91,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="Beam.h">
       <Filter>Header Files\Attacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickup.h">
+      <Filter>Header Files\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,9 +5,11 @@
 Player::Player() :
 	Humanoid(),
 	m_HoldingDown{ false },
-	m_HoldingJump{ false }
+	m_HoldingJump{ false },
+	m_Score{ 0 },
+	m_JumpCount{ 0 }
 {
-	SetHealth(10);
+	SetHealth(PLAYER_HEALTH);
 }
 
 void Player::Update(float elapsedSec) 
@@ -16,13 +18,17 @@ void Player::Update(float elapsedSec)
 
 	if (m_HoldingJump and isFalling) {
 		m_Gravity = (GRAVITY / 8);
-	} else if ( m_HoldingDown and isFalling ) {
-		m_Gravity = (GRAVITY * 3);
+	} else if ( m_HoldingDown ) {
+		m_Gravity = (GRAVITY * 4);
 	} else {
 		m_Gravity = GRAVITY;
+	}; 
+
+	if (not InAir()) {
+		m_JumpCount = 0;
 	};
 
-	Humanoid::Update(elapsedSec);
+	Humanoid::Update(elapsedSec); 
 }
 void Player::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 {
@@ -38,6 +44,7 @@ void Player::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 			break;
 	};
 }
+
 void Player::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
 {
 	switch (e.keysym.sym) { 
@@ -54,8 +61,12 @@ void Player::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
 
 void Player::Jump()
 {
-	if (not InAir()) {
-		m_Velocity += Vector2f(0, DEFAULT_HUMANOID_JUMP_POWER);
+	if (GetHealth() > 0) {
+		if (not InAir() or m_JumpCount < 1) {
+			m_JumpCount += 1;
+			m_Velocity.y = 0;
+			m_Velocity += Vector2f(0, (DEFAULT_HUMANOID_JUMP_POWER / (m_JumpCount) ));
+		}
 	}
 }
 

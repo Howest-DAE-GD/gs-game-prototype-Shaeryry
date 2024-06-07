@@ -46,6 +46,10 @@ void Humanoid::Update(float elapsedSec)
 
 	// Physics
 	m_CurrentVelocity = (m_Position - prePosition);
+
+	// Update hitbox 
+	m_Hitbox.left = m_Position.x;
+	m_Hitbox.bottom = m_Position.y;
 }
 
 void Humanoid::Draw() const

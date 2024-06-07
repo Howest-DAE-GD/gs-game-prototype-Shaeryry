@@ -9,10 +9,19 @@
 
 Boss::Boss(Player* player) :
 	Humanoid(),
+	m_CanAttack{ false },
 	m_BossClock{ 0 },
 	m_AttackClock{ 0 },
 	m_PlayerTarget{ player }
 {
+	Reset();
+}
+
+Boss::~Boss()
+{
+	for (size_t attackIndex{}; attackIndex < m_Attacks.size(); attackIndex++) {
+		delete m_Attacks[attackIndex];
+	};
 }
 
 void Boss::Update(float elapsedSec)
@@ -31,10 +40,12 @@ void Boss::Update(float elapsedSec)
 		}
 	};
 
-	if (m_AttackClock>=2) {
-		LaunchAttack( new Beam(m_PlayerTarget) );
-		m_AttackClock = 0;
-	}
+	if (m_PlayerTarget->GetHealth() > 0) {
+		if (m_AttackClock >= 2) {
+			LaunchAttack(new Beam(m_PlayerTarget));
+			m_AttackClock = 0;
+		}
+	};
 
 	m_BossClock += elapsedSec;
 	m_AttackClock += elapsedSec;
@@ -43,7 +54,7 @@ void Boss::Update(float elapsedSec)
 void Boss::Draw() const
 {
 	const float cycleTime{ 1 };
-	const float range{ 60 };
+	const float range{ 60 };  
 	glPushMatrix();
 	glTranslatef(
 		range * float(cos( 1* M_PI* (m_BossClock / cycleTime) )),
@@ -61,8 +72,17 @@ void Boss::Draw() const
 
 void Boss::LaunchAttack(Attack* attack)
 {
-	if (attack != nullptr) {
-		m_Attacks.emplace_back(attack);
+	if (m_CanAttack) {
+		if (attack != nullptr) {
+			m_Attacks.emplace_back(attack);
+		}
 	}
+}
+
+void Boss::Reset()
+{
+	//m_BossClock = 0;
+	m_AttackClock = 0;
+	SetActive(false);
 }
  

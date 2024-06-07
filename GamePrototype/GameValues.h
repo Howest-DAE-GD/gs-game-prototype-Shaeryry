@@ -11,7 +11,7 @@ static const float DEFAULT_BALL_SPEED{ 50 };
 static const float DEFAULT_BALL_RADIUS{ 15.f };
 
 static const float DEFAULT_HUMANOID_MOVEMENT_SPEED{ 300 }; 
-static const float DEFAULT_HUMANOID_JUMP_POWER{ 900 };
+static const float DEFAULT_HUMANOID_JUMP_POWER{ 800 };
 static const float DEFAULT_HUMANOID_ACCELERATION{ 400 };
 static const float DEFAULT_HUMANOID_DECELERATION{ 300 };
 
@@ -29,3 +29,15 @@ static const SDL_Keycode DOWN_KEY{ SDLK_DOWN };
 static const float GRAVITY{ 9.81f };
 static const float GROUND_HEIGHT{ 50 };
 static const float BOSS_OFFSET{ 350 };
+
+static const float PICK_UP_DEFAULT_SIZE{ 35 };
+static const float PICK_UP_SPAWN_BASE_HEIGHT{ 35 };
+static const float PICK_SPAWN_MARGIN{ 50 };
+static const int PICK_UP_MIN_COOLDOWN{ 2 };
+static const int PICK_UP_MAX_COOLDOWN{ 6 };
+static const int PICK_UP_COUNT{ 4 };
+
+static const int UI_HEIGHT{ 75 };
+static const int UI_WIDTH{ int(WINDOW_WIDTH) };
+static const int PLAYER_HEALTH{ 10 };
+
